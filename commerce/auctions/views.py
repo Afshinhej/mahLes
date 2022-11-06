@@ -76,7 +76,8 @@ def auction(request, auction_title):
     if auction_title.upper() in existing_titles:
         auction_index = existing_titles.index(auction_title.upper())
         return render(request, "auctions/auction.html",{
-            "auction": Auction.objects.get(pk=1+auction_index)
+            # "auction": Auction.objects.get(pk=1+auction_index)
+            "auction": Auction.objects.get(title__iexact=auction_title)
         })
 
     return render(request, "auctions/auction.html",{
