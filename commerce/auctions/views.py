@@ -4,11 +4,20 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Auction_listing
+
+# To derive a list of specefic feature (column) from a table (query set) 
+def derive(Queryset, requested_field): # requestd_firld has to be 'str'.
+    result = []
+    for _ in Queryset.objects.values(requested_field):
+        result.append(_[requested_field])
+    return result
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html", {
+        "auctions": Auction_listing.objects.all()
+    })
 
 
 def login_view(request):
@@ -61,3 +70,15 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+def auction(request, auction_title):
+    existing_titles = list(map(str.upper, derive(Auction_listing, 'title')))
+    if auction_title.upper() in existing_titles:
+        auction_index = existing_titles.index(auction_title.upper())
+        return render(request, "auctions/auction.html",{
+            "auction_listing": Auction_listing.objects.get(pk=1+auction_index)
+        })
+
+    return render(request, "auctions/auction.html",{
+            "auction_listing": Auction_listing.objects.get(pk=1+auction_index)
+        })
