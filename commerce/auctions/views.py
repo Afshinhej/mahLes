@@ -6,14 +6,6 @@ from django.urls import reverse
 
 from .models import User, Auction
 
-# To derive a list of specefic feature (column) from a table (query set) 
-def derive(Queryset, requested_field): # requestd_firld has to be 'str'.
-    result = []
-    for _ in Queryset.objects.values(requested_field):
-        result.append(_[requested_field])
-    return result
-
-
 def index(request):
     return render(request, "auctions/index.html", {
         "auctions": Auction.objects.all()
@@ -72,14 +64,13 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def auction(request, auction_title):
-    existing_titles = list(map(str.upper, derive(Auction, 'title')))
-    if auction_title.upper() in existing_titles:
-        auction_index = existing_titles.index(auction_title.upper())
+    auctions = Auction.objects.all()
+    existing_titles = list(auction.title for auction in auctions)
+    if auction_title.upper() in list(map(str.upper,existing_titles)):
         return render(request, "auctions/auction.html",{
-            # "auction": Auction.objects.get(pk=1+auction_index)
             "auction": Auction.objects.get(title__iexact=auction_title)
         })
 
     return render(request, "auctions/auction.html",{
-            "auction": Auction.objects.get(title=auction_title)
-        })
+        'message':"No data available!"
+    })
