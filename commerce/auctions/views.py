@@ -80,5 +80,5 @@ def auction(request, auction_title):
         })
 
     return render(request, "auctions/auction.html",{
-            "auction_listing": Auction_listing.objects.get(pk=1+auction_index)
+            "auction_listing": Auction_listing.objects.get(title=auction_title)
         })

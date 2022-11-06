@@ -6,10 +6,12 @@
     <ul>
         {% for auction in auctions %}
         <li>
-            <h3>{{ auction.title }}</h3>
+            
+            <a href="{% url 'auction' auction.title %}"> {{ auction.title }} </a>
+            
         </li>
         {% empty %}
-            No aiction listings.
+            No auction listings.
         {% endfor %}
     </ul>
 {% endblock %}
