@@ -11,12 +11,13 @@ class Category(models.Model):
 
     def __str__(self):
         return f"{self.name}"
-class Auction_listing(models.Model):
+class Auction(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField()
     starting_bid = models.FloatField() #maybe it is beter to use models.IntegerField
     imageURL = models.URLField()
     category = models.ManyToManyField(Category, blank=True, related_name="category")
+    owner = models.ManyToManyField(User, related_name="owner")
 
     def __str__(self):
         return f"{self.title}"
