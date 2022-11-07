@@ -64,8 +64,7 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def auction(request, auction_title):
-    auctions = Auction.objects.all()
-    existing_titles = list(auction.title for auction in auctions)
+    existing_titles = list(auction.title for auction in Auction.objects.all())
     if auction_title.upper() in list(map(str.upper,existing_titles)):
         return render(request, "auctions/auction.html",{
             "auction": Auction.objects.get(title__iexact=auction_title)
